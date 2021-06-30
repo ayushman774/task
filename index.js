@@ -1,17 +1,9 @@
-const mongoose = require('mongoose');
+const koa = require('koa');
+const bodyParser = require('koa-bodyparser');
+const userRoutes = require('./routes/users.routes');
 
-const connection = mongoose.createConnection('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+const app = new koa();
+app.use(bodyParser());
 
-const userSchema = mongoose.Schema({
-    username: String,
-    contact: Number,
-    email: String,
-    password: String,
-});
-
-let user = connection.model('user', userSchema);
-
-module.exports = user;
+app.use(userRoutes.routes()).use(userRoutes.allowedMethods());
+app.listen(3000)
